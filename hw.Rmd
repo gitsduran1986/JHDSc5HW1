@@ -1,0 +1,20 @@
+---
+title: "JHDS HW"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Downloading the data
+
+```{r}
+
+data <- read.csv('./repdata_data_activity/activity.csv')
+```
+
+
+
+
+
