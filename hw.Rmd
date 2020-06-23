@@ -1,6 +1,8 @@
 ---
 title: "JHDS HW"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -12,22 +14,23 @@ knitr::opts_chunk$set(echo = TRUE)
 read in the data using read.csv function
 
 ```{r}
+library(readr)
 raw <- read.csv('./repdata_data_activity/activity.csv')
 ```
 
-clean up data, namely, removing NAs
+#clean up data, namely, removing NAs
 
 ```{r}
-data <- data[!is.na(raw$steps),]
+data <- raw[!is.na(raw$steps),]
 ```
 
-import necessary packages and make dataset that groups data by date
+#import necessary packages and make dataset that groups data by date
 
 ```{r, echo=FALSE}
 library(dplyr)
 ```
 
-group data by date
+#group data by date
 
 ```{r}
 data.by_date <- data %>%
@@ -40,7 +43,7 @@ data$date_detail <- as.POSIXct(paste(data$date, data$interval.time), format="%Y-
 data$date <- as.Date(data$date)
 ```
 
-## 2. Historgram
+## 2. Histogram
 
 ```{r}
 hist(data.by_date$steps,breaks = seq(0,30000,2500),
@@ -70,7 +73,7 @@ paste(data[which.max(data$steps),]$date,data[which.max(data$steps),]$interval,se
 ```
 ## 6. Imputing Missing Data
 
-Goal is to impute data with average value for each interval.  Step 1 is make a table with these average values
+#Goal is to impute data with average value for each interval.  Step 1 is make a table with these average values
 
 ```{r}
 avg.by.interval <- data %>% group_by(interval) %>% summarize(Mean.steps = mean(steps))
@@ -89,7 +92,7 @@ for (i in seq(1,nrow(raw))){
 
 ## 7. Histogram with imputed values
 
-rebuild data dataframe with imputed raw dataset
+#rebuild data dataframe with imputed raw dataset
 ```{r}
 data <- raw
 ```
@@ -107,7 +110,7 @@ data$date_detail <- as.POSIXct(paste(data$date, data$interval.time), format="%Y-
 data$date <- as.Date(data$date)
 ```
 
-build histogram
+#build histogram
 
 ```{r}
 hist(data.by_date$steps,breaks = seq(0,30000,2500),
@@ -116,7 +119,7 @@ hist(data.by_date$steps,breaks = seq(0,30000,2500),
 
 ## Panel plot weekends vs weekday
 
-Create weekend and weekdaya datasets
+#Create weekend and weekdaya datasets
 ```{r}
 library(timeDate)
 data$weekday <- isWeekday(data$date)
@@ -124,7 +127,7 @@ weekday <- data[data$weekday,]
 weekend <- data[!data$weekday,]
 ```
 
-make plots
+#make plots
 ```{r}
 par(mfrow=c(1,2))
 plot(x = weekday$date_detail, y = weekday$steps,type="l",xlab="date",ylab="steps",main="weekdays")
